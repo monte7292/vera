@@ -10,6 +10,7 @@
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  margin-top: 12px;
 }
 
 .filtros::-webkit-scrollbar {

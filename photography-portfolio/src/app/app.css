@@ -42,7 +42,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  min-height: 78vh;
+  min-height: 50vh;
   padding: 0 24px;
   overflow: hidden;
 }
@@ -69,6 +69,11 @@
 }
 
 .hero__descripcion {
+  color: var(--texto-suave);
+  max-width: 46ch;
+}
+
+.hero__descripcion2 {
   color: var(--texto-suave);
   max-width: 46ch;
 }
@@ -124,6 +129,10 @@
   margin-bottom: 32px;
 }
 
+.galeria__titulo2 {
+  margin-bottom: 10px;
+}
+
 .contacto__nota {
   margin-bottom: 28px;
   color: var(--texto-suave);
@@ -134,9 +143,8 @@
 }
 
 .pie {
-  border-top: 1px solid var(--borde);
   padding: 32px 24px;
-  text-align: center;
+  text-align: left;
   font-size: 0.85rem;
   color: var(--texto-suave);
 }
@@ -153,5 +161,53 @@
 
   .seccion {
     padding: 64px 20px;
+  }
+}
+
+
+.whatsapp {
+  position: fixed;
+  right: calc(18px + env(safe-area-inset-right, 0px));
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background-color: #25d366;
+  color: #fff;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.whatsapp::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid #25d366;
+  animation: whatsapp-pulso 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+.whatsapp:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 26px rgb(0 0 0 / 0.45);
+}
+
+.whatsapp:active {
+  transform: scale(0.96);
+}
+
+@keyframes whatsapp-pulso {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp::after {
+    animation: none;
   }
 }
