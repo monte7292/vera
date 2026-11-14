@@ -4,9 +4,11 @@
       type="button"
       class="filtros__boton"
       [class.filtros__boton--activo]="categoria === categoriaActiva()"
-      (click)="seleccionarCategoria(categoria)"
+      [attr.aria-pressed]="categoria === categoriaActiva()"
+      (click)="seleccionarCategoria(categoria, $event)"
     >
-      {{ categoria }}
+      <span class="filtros__texto">{{ categoria }}</span>
+      <span class="filtros__num">{{ conteos().get(categoria) ?? 0 }}</span>
     </button>
   }
 </nav>

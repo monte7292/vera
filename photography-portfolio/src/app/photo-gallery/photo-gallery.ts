@@ -47,6 +47,16 @@ export class PhotoGallery implements OnInit, OnDestroy {
     return categoria === 'Todas' ? fotos : fotos.filter((f) => f.categoria === categoria);
   });
 
+  protected readonly conteos = computed(() => {
+    const mapa = new Map<string, number>();
+    const fotos = this.fotos();
+    mapa.set('Todas', fotos.length);
+    for (const f of fotos) {
+      mapa.set(f.categoria, (mapa.get(f.categoria) ?? 0) + 1);
+    }
+    return mapa;
+  });
+
   protected readonly fotoAbierta = computed(() => {
     const i = this.indiceAbierto();
     return i === null ? null : (this.fotosFiltradas()[i] ?? null);
@@ -85,9 +95,14 @@ export class PhotoGallery implements OnInit, OnDestroy {
     document.body.style.overflow = '';
   }
 
-  protected seleccionarCategoria(categoria: string): void {
+  protected seleccionarCategoria(categoria: string, evento?: Event): void {
     this.cerrar();
     this.categoriaActiva.set(categoria);
+    (evento?.currentTarget as HTMLElement | null)?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'center',
+      block: 'nearest'
+    });
   }
 
   protected abrir(indice: number): void {
