@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "id": "1LpB0OXVLqtefbl4ogTzd5BBlHSZ3C3ho",
+    "titulo": "732871784 17931756837323832 2533482489673780307 n",
+    "categoria": "Coches",
+    "imagen": "/images/Coches/732871784-17931756837323832-2533482489673780307-n-1LpB0O.webp",
+    "ancho": 1800,
+    "alto": 1799,
+    "creada": "2026-11-14T18:35:58.791Z",
+    "modificada": "2026-11-14T18:35:58.854Z"
+  },
+  {
+    "id": "10-5LkEcmMWwhmC3TWP9QRAgeDWSwuVhV",
+    "titulo": "892172006 17952330852323832 2753754212302725036 n",
+    "categoria": "Coches",
+    "imagen": "/images/Coches/892172006-17952330852323832-2753754212302725036-n-10-5Lk.webp",
+    "ancho": 1800,
+    "alto": 2400,
+    "creada": "2026-11-14T18:34:49.214Z",
+    "modificada": "2026-11-14T18:34:49.060Z"
+  }
+]
