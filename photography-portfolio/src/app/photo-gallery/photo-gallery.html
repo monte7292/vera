@@ -1,4 +1,4 @@
-<nav class="filtros">
+<nav class="filtros" aria-label="Categorías">
   @for (categoria of categorias(); track categoria) {
     <button
       type="button"
@@ -17,17 +17,23 @@
   } @else if (error()) {
     <p class="galeria__vacia">No se han podido cargar las fotos.</p>
   } @else {
-    @for (foto of fotosFiltradas(); track foto.imagen) {
+    @for (foto of fotosFiltradas(); track foto.imagen; let i = $index) {
       <figure class="foto">
-        <img
-          [src]="foto.imagen"
-          [alt]="foto.titulo + ' (' + foto.categoria + ')'"
-          [attr.width]="foto.ancho"
-          [attr.height]="foto.alto"
-          loading="lazy"
-        />
+        <button
+          type="button"
+          class="foto__abrir"
+          [attr.aria-label]="'Ver foto de ' + foto.categoria + ' en grande'"
+          (click)="abrir(i)"
+        >
+          <img
+            [src]="foto.imagen"
+            [alt]="'Foto de ' + foto.categoria"
+            [attr.width]="foto.ancho"
+            [attr.height]="foto.alto"
+            loading="lazy"
+          />
+        </button>
         <figcaption class="foto__pie">
-          <span class="foto__titulo">{{ foto.titulo }}</span>
           <span class="foto__categoria">{{ foto.categoria }}</span>
         </figcaption>
       </figure>
@@ -36,3 +42,46 @@
     }
   }
 </div>
+
+<dialog #visor class="visor" aria-label="Visor de fotos" (close)="alCerrarDialogo()">
+  @if (fotoAbierta(); as foto) {
+    <div
+      class="visor__escena"
+      (click)="clickFondo($event)"
+      (touchstart)="tocarInicio($event)"
+      (touchend)="tocarFin($event)"
+    >
+      <img [src]="foto.imagen" [alt]="'Foto de ' + foto.categoria" draggable="false" />
+    </div>
+
+    <div class="visor__barra">
+      <span class="visor__contador">
+        {{ (indiceAbierto() ?? 0) + 1 }} / {{ fotosFiltradas().length }}
+      </span>
+      <button type="button" class="visor__cerrar" aria-label="Cerrar" (click)="cerrar()">✕</button>
+    </div>
+
+    @if (fotosFiltradas().length > 1) {
+      <button
+        type="button"
+        class="visor__flecha visor__flecha--izq"
+        aria-label="Foto anterior"
+        (click)="anterior()"
+      >
+        ‹
+      </button>
+      <button
+        type="button"
+        class="visor__flecha visor__flecha--der"
+        aria-label="Foto siguiente"
+        (click)="siguiente()"
+      >
+        ›
+      </button>
+    }
+
+    <div class="visor__pie">
+      <span class="visor__categoria">{{ foto.categoria }}</span>
+    </div>
+  }
+</dialog>

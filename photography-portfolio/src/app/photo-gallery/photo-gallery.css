@@ -1,33 +1,55 @@
+/* ===== Filtros: cristal, flotando sobre las fotos ===== */
 .filtros {
+  position: sticky;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  z-index: 5;
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 32px;
+  margin: 0 0 24px;
+  padding: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filtros::-webkit-scrollbar {
+  display: none;
 }
 
 .filtros__boton {
-  padding: 8px 18px;
-  border: 1px solid var(--borde);
+  flex: 0 0 auto;
+  padding: 9px 18px;
+  border: 1px solid rgb(255 255 255 / 0.22);
   border-radius: 999px;
-  background: transparent;
-  color: var(--texto-suave);
+  background: rgb(255 255 255 / 0.1);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  color: var(--texto);
   font: inherit;
   font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .filtros__boton:hover {
-  color: var(--texto);
-  border-color: var(--acento);
+  background: rgb(255 255 255 / 0.18);
+  border-color: rgb(255 255 255 / 0.4);
 }
 
 .filtros__boton--activo {
-  background-color: var(--acento);
-  border-color: var(--acento);
+  background: rgb(255 255 255 / 0.9);
+  border-color: transparent;
   color: #101014;
 }
 
+.filtros__boton--activo:hover {
+  background: #fff;
+}
+
+/* ===== Galería ===== */
 .galeria {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -42,12 +64,29 @@
   position: relative;
   margin: 0;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 14px;
   background-color: var(--superficie);
   aspect-ratio: 4 / 3;
 }
 
+.foto__abrir {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.foto__abrir:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+}
+
 .foto img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -58,30 +97,180 @@
   transform: scale(1.05);
 }
 
+/* Categoría: etiqueta de cristal sobre la foto, siempre visible */
 .foto__pie {
   position: absolute;
-  inset: auto 0 0 0;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 36px 16px 14px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.foto:hover .foto__pie {
-  opacity: 1;
-}
-
-.foto__titulo {
-  font-size: 0.95rem;
+  left: 10px;
+  bottom: 10px;
+  pointer-events: none;
 }
 
 .foto__categoria {
-  color: var(--acento);
-  font-size: 0.75rem;
+  display: inline-block;
+  padding: 5px 12px;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.28);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+/* ===== Visor a pantalla completa ===== */
+.visor {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.visor[open] {
+  display: block;
+  height: 100dvh;
+  animation: visor-entrada 0.2s ease;
+}
+
+.visor::backdrop {
+  background: #000;
+}
+
+@keyframes visor-entrada {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* La foto ocupa toda la pantalla; los botones flotan encima */
+.visor__escena {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: pan-y pinch-zoom;
+}
+
+.visor__escena img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Elementos de cristal sobre la foto */
+.visor__contador,
+.visor__cerrar,
+.visor__flecha,
+.visor__categoria {
+  border: 1px solid rgb(255 255 255 / 0.2);
+  background: rgb(0 0 0 / 0.28);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
+  color: #fff;
+}
+
+.visor__barra {
+  position: absolute;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  left: calc(12px + env(safe-area-inset-left, 0px));
+  right: calc(12px + env(safe-area-inset-right, 0px));
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.visor__barra > * {
+  pointer-events: auto;
+}
+
+.visor__contador {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.visor__cerrar {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s ease;
+}
+
+.visor__cerrar:hover {
+  background: rgb(255 255 255 / 0.22);
+}
+
+.visor__pie {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.visor__categoria {
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Flechas: solo en ordenador, en móvil se desliza */
+.visor__flecha {
+  display: none;
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 2rem;
+  line-height: 1;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.visor__flecha:hover {
+  background: rgb(255 255 255 / 0.22);
+}
+
+.visor__flecha--izq { left: 1rem; }
+.visor__flecha--der { right: 1rem; }
+
+@media (hover: hover) and (pointer: fine) {
+  .visor__flecha {
+    display: grid;
+  }
 }

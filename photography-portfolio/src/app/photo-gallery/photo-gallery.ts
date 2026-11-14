@@ -1,4 +1,13 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  computed,
+  effect,
+  signal,
+  viewChild
+} from '@angular/core';
 
 export interface Foto {
   titulo: string;
@@ -11,13 +20,21 @@ export interface Foto {
 @Component({
   selector: 'app-photo-gallery',
   templateUrl: './photo-gallery.html',
-  styleUrl: './photo-gallery.css'
+  styleUrl: './photo-gallery.css',
+  host: { '(document:keydown)': 'teclado($event)' }
 })
-export class PhotoGallery implements OnInit {
+export class PhotoGallery implements OnInit, OnDestroy {
   protected readonly fotos = signal<Foto[]>([]);
   protected readonly cargando = signal(true);
   protected readonly error = signal(false);
   protected readonly categoriaActiva = signal('Todas');
+  protected readonly indiceAbierto = signal<number | null>(null);
+
+  private readonly visor = viewChild<ElementRef<HTMLDialogElement>>('visor');
+
+  private inicioX = 0;
+  private inicioY = 0;
+  private variosDedos = false;
 
   protected readonly categorias = computed(() => [
     'Todas',
@@ -29,6 +46,28 @@ export class PhotoGallery implements OnInit {
     const fotos = this.fotos();
     return categoria === 'Todas' ? fotos : fotos.filter((f) => f.categoria === categoria);
   });
+
+  protected readonly fotoAbierta = computed(() => {
+    const i = this.indiceAbierto();
+    return i === null ? null : (this.fotosFiltradas()[i] ?? null);
+  });
+
+  constructor() {
+    // Abre o cierra el <dialog> según el estado
+    effect(() => {
+      const abierto = this.indiceAbierto() !== null;
+      const dialogo = this.visor()?.nativeElement;
+      if (!dialogo) return;
+
+      if (abierto && !dialogo.open) {
+        dialogo.showModal();
+        document.body.style.overflow = 'hidden';
+      } else if (!abierto && dialogo.open) {
+        dialogo.close();
+        document.body.style.overflow = '';
+      }
+    });
+  }
 
   async ngOnInit(): Promise<void> {
     try {
@@ -42,7 +81,80 @@ export class PhotoGallery implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    document.body.style.overflow = '';
+  }
+
   protected seleccionarCategoria(categoria: string): void {
+    this.cerrar();
     this.categoriaActiva.set(categoria);
+  }
+
+  protected abrir(indice: number): void {
+    this.indiceAbierto.set(indice);
+  }
+
+  protected cerrar(): void {
+    this.indiceAbierto.set(null);
+  }
+
+  // Se dispara con Esc o con el botón "atrás" del navegador
+  protected alCerrarDialogo(): void {
+    if (this.indiceAbierto() !== null) this.indiceAbierto.set(null);
+    document.body.style.overflow = '';
+  }
+
+  protected siguiente(): void {
+    const i = this.indiceAbierto();
+    const total = this.fotosFiltradas().length;
+    if (i === null || total === 0) return;
+    this.indiceAbierto.set((i + 1) % total);
+  }
+
+  protected anterior(): void {
+    const i = this.indiceAbierto();
+    const total = this.fotosFiltradas().length;
+    if (i === null || total === 0) return;
+    this.indiceAbierto.set((i - 1 + total) % total);
+  }
+
+  protected clickFondo(evento: MouseEvent): void {
+    if (evento.target === evento.currentTarget) this.cerrar();
+  }
+
+  protected teclado(evento: KeyboardEvent): void {
+    if (this.indiceAbierto() === null) return;
+    if (evento.key === 'ArrowRight') this.siguiente();
+    else if (evento.key === 'ArrowLeft') this.anterior();
+  }
+
+  protected tocarInicio(evento: TouchEvent): void {
+    if (evento.touches.length > 1) {
+      this.variosDedos = true;
+      return;
+    }
+    this.variosDedos = false;
+    this.inicioX = evento.touches[0].clientX;
+    this.inicioY = evento.touches[0].clientY;
+  }
+
+  protected tocarFin(evento: TouchEvent): void {
+    const eraPellizco = this.variosDedos;
+    if (evento.touches.length === 0) this.variosDedos = false;
+
+    // Si hay zoom o fue un pellizco, no interpretamos el gesto como swipe
+    const conZoom = (window.visualViewport?.scale ?? 1) > 1.05;
+    if (eraPellizco || conZoom) return;
+
+    const toque = evento.changedTouches[0];
+    const dx = toque.clientX - this.inicioX;
+    const dy = toque.clientY - this.inicioY;
+
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) this.siguiente();
+      else this.anterior();
+    } else if (dy > 90 && Math.abs(dy) > Math.abs(dx) * 1.5) {
+      this.cerrar();
+    }
   }
 }
