@@ -1,5 +1,5 @@
 <nav class="filtros">
-  @for (categoria of categorias; track categoria) {
+  @for (categoria of categorias(); track categoria) {
     <button
       type="button"
       class="filtros__boton"
@@ -12,15 +12,27 @@
 </nav>
 
 <div class="galeria">
-  @for (foto of fotosFiltradas(); track foto.titulo) {
-    <figure class="foto">
-      <img [src]="foto.imagen" [alt]="foto.titulo + ' (' + foto.categoria + ')'" loading="lazy" />
-      <figcaption class="foto__pie">
-        <span class="foto__titulo">{{ foto.titulo }}</span>
-        <span class="foto__categoria">{{ foto.categoria }}</span>
-      </figcaption>
-    </figure>
-  } @empty {
-    <p class="galeria__vacia">No hay fotos en esta categoría.</p>
+  @if (cargando()) {
+    <p class="galeria__vacia">Cargando fotos…</p>
+  } @else if (error()) {
+    <p class="galeria__vacia">No se han podido cargar las fotos.</p>
+  } @else {
+    @for (foto of fotosFiltradas(); track foto.imagen) {
+      <figure class="foto">
+        <img
+          [src]="foto.imagen"
+          [alt]="foto.titulo + ' (' + foto.categoria + ')'"
+          [attr.width]="foto.ancho"
+          [attr.height]="foto.alto"
+          loading="lazy"
+        />
+        <figcaption class="foto__pie">
+          <span class="foto__titulo">{{ foto.titulo }}</span>
+          <span class="foto__categoria">{{ foto.categoria }}</span>
+        </figcaption>
+      </figure>
+    } @empty {
+      <p class="galeria__vacia">No hay fotos en esta categoría.</p>
+    }
   }
 </div>
