@@ -1,0 +1,26 @@
+<nav class="filtros">
+  @for (categoria of categorias; track categoria) {
+    <button
+      type="button"
+      class="filtros__boton"
+      [class.filtros__boton--activo]="categoria === categoriaActiva()"
+      (click)="seleccionarCategoria(categoria)"
+    >
+      {{ categoria }}
+    </button>
+  }
+</nav>
+
+<div class="galeria">
+  @for (foto of fotosFiltradas(); track foto.titulo) {
+    <figure class="foto">
+      <img [src]="foto.imagen" [alt]="foto.titulo + ' (' + foto.categoria + ')'" loading="lazy" />
+      <figcaption class="foto__pie">
+        <span class="foto__titulo">{{ foto.titulo }}</span>
+        <span class="foto__categoria">{{ foto.categoria }}</span>
+      </figcaption>
+    </figure>
+  } @empty {
+    <p class="galeria__vacia">No hay fotos en esta categoría.</p>
+  }
+</div>

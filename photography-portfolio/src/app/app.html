@@ -1,0 +1,45 @@
+<header class="cabecera">
+  <div class="cabecera__contenido">
+    <a class="cabecera__marca" href="#inicio">David Vera<span>.</span></a>
+    <nav class="cabecera__nav">
+      <a href="#galeria">Galería</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="inicio">
+  <img
+    class="hero__imagen"
+    src="images/fondo.jpg"
+    alt="Fondo de vera con la imagen del coche"
+  />
+  <div class="hero__texto">
+    <p class="seccion__etiqueta">Fotografía documental y de retrato</p>
+    <h1>Historias que se quedan contigo</h1>
+    <p class="hero__descripcion">
+      Retratos, bodas y paisajes con luz natural. Trabajo en Madrid y donde haga falta.
+    </p>
+    <a class="hero__boton" href="#galeria">Ver galería</a>
+  </div>
+</section>
+
+<section class="seccion" id="galeria">
+  <p class="seccion__etiqueta etiqueta-titulo">Galería</p>
+  <h2 class="galeria__titulo">Últimos trabajos</h2>
+  <app-photo-gallery />
+</section>
+
+<section class="seccion" id="contacto">
+  <p class="seccion__etiqueta etiqueta-titulo">Contacto</p>
+  <h2 class="contacto__titulo">¿Hablamos de tu proyecto?</h2>
+  <p class="contacto__nota">
+    Escríbeme y te cuento presupuestos y disponibilidad. También puedes encontrarme en
+    <a href="mailto:hola@luciaferrer.com">hola&#64;luciaferrer.com</a>.
+  </p>
+  <app-contact-form />
+</section>
+
+<footer class="pie">
+  <p>© 2026 David Vera · Fotografía</p>
+</footer>

@@ -1,0 +1,157 @@
+.cabecera {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: rgba(13, 13, 16, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--borde);
+}
+
+.cabecera__contenido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 24px;
+}
+
+.cabecera__marca {
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cabecera__marca span {
+  color: var(--acento);
+}
+
+.cabecera__nav {
+  display: flex;
+  gap: 24px;
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+}
+
+.cabecera__nav a:hover {
+  color: var(--acento);
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 78vh;
+  padding: 0 24px;
+  overflow: hidden;
+}
+
+.hero__imagen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.45;
+}
+
+.hero__texto {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 80px 0;
+}
+
+.hero__texto h1 {
+  margin: 12px 0 20px;
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+}
+
+.hero__descripcion {
+  color: var(--texto-suave);
+  max-width: 46ch;
+}
+
+.hero__boton {
+  display: inline-block;
+  margin-top: 32px;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background-color: var(--acento);
+  color: #101014;
+  font-weight: 600;
+}
+
+.hero__boton:hover {
+  opacity: 0.85;
+}
+
+.sobre-mi {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+  margin-top: 24px;
+}
+
+.sobre-mi__foto {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.sobre-mi__texto p {
+  margin-top: 16px;
+  color: var(--texto-suave);
+}
+
+.sobre-mi__lista {
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.sobre-mi__lista li::before {
+  content: "—";
+  margin-right: 10px;
+  color: var(--acento);
+}
+
+.galeria__titulo,
+.contacto__titulo {
+  margin-bottom: 32px;
+}
+
+.contacto__nota {
+  margin-bottom: 28px;
+  color: var(--texto-suave);
+}
+
+.contacto__nota a {
+  color: var(--acento);
+}
+
+.pie {
+  border-top: 1px solid var(--borde);
+  padding: 32px 24px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+@media (max-width: 720px) {
+  .sobre-mi {
+    grid-template-columns: 1fr;
+  }
+
+  .cabecera__nav {
+    gap: 16px;
+    font-size: 0.8rem;
+  }
+
+  .seccion {
+    padding: 64px 20px;
+  }
+}
