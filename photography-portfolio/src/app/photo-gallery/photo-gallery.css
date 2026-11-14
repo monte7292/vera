@@ -245,33 +245,48 @@
   text-transform: uppercase;
 }
 
-/* Flechas: solo en ordenador, en móvil se desliza */
+/* Flechas: visibles en móvil y ordenador */
 .visor__flecha {
-  display: none;
   position: absolute;
   top: 50%;
   z-index: 2;
-  width: 3rem;
-  height: 3rem;
-  padding: 0;
+  display: grid;
   place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0 0 0.2rem;
   border-radius: 50%;
-  font-size: 2rem;
+  font-size: 1.9rem;
   line-height: 1;
   transform: translateY(-50%);
   cursor: pointer;
-  transition: background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
 
 .visor__flecha:hover {
   background: rgb(255 255 255 / 0.22);
 }
 
-.visor__flecha--izq { left: 1rem; }
-.visor__flecha--der { right: 1rem; }
+.visor__flecha:active {
+  transform: translateY(-50%) scale(0.92);
+}
 
-@media (hover: hover) and (pointer: fine) {
+.visor__flecha--izq {
+  left: calc(10px + env(safe-area-inset-left, 0px));
+}
+
+.visor__flecha--der {
+  right: calc(10px + env(safe-area-inset-right, 0px));
+}
+
+@media (min-width: 720px) {
   .visor__flecha {
-    display: grid;
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
   }
+
+  .visor__flecha--izq { left: 1rem; }
+  .visor__flecha--der { right: 1rem; }
 }
