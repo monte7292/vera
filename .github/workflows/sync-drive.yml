@@ -1,27 +1,16 @@
-name: Sync Drive
-
-on:
-  schedule:
-    - cron: '*/15 * * * *'
-  workflow_dispatch:
-  repository_dispatch:
-    types: [drive-updated]
-
-permissions:
-  contents: write
-
-concurrency:
-  group: sync-drive
-
 jobs:
   sync:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: photography-portfolio
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: photography-portfolio/package-lock.json
       - run: npm ci
       - run: node scripts/sync-drive.mjs
         env:
