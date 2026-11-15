@@ -1,5 +1,25 @@
 [
   {
+    "id": "1yG38hh8mudJ58JWSNBmjZw_MvVug6y0q",
+    "titulo": "856155489 17948983047323832 960325836204270252 n",
+    "categoria": "Coches",
+    "imagen": "/images/Coches/856155489-17948983047323832-960325836204270252-n-1yG38h.webp",
+    "ancho": 1800,
+    "alto": 2400,
+    "creada": "2026-11-14T20:13:36.327Z",
+    "modificada": "2026-11-14T20:13:36.031Z"
+  },
+  {
+    "id": "13pLdzytok8U6t1l7hGGvNwzeAD8CpxTX",
+    "titulo": "499371474 17878199007323832 6201084041597328680 n",
+    "categoria": "Animales",
+    "imagen": "/images/Animales/499371474-17878199007323832-6201084041597328680-n-13pLdz.webp",
+    "ancho": 1080,
+    "alto": 1350,
+    "creada": "2026-11-14T20:12:53.071Z",
+    "modificada": "2026-11-14T20:12:53.363Z"
+  },
+  {
     "id": "14IjyOfJ19wvKDmJpvRnDc9Jh5lVhZMHg",
     "titulo": "882265322 18480270529116743 350145575588002002 n",
     "categoria": "Motos",
