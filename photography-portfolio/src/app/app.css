@@ -187,6 +187,23 @@
   width: 58px;
   height: 58px;
   border-radius: 50%;
+  background-color: #ffffff;
+  color: #fff;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.whatsapp2 {
+  position: fixed;
+  right: calc(18px + env(safe-area-inset-right, 0px));
+  bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
   background-color: #25d366;
   color: #fff;
   box-shadow: 0 6px 20px rgb(0 0 0 / 0.35);
@@ -199,7 +216,17 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 2px solid #25d366;
+  border: 1px solid #ffffff;
+  animation: whatsapp-pulso 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+.whatsapp2::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid #25d366;
   animation: whatsapp-pulso 2.4s ease-out infinite;
   pointer-events: none;
 }
