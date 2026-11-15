@@ -41,7 +41,7 @@
     <p class="galeria__vacia">No se han podido cargar las fotos.</p>
   } @else {
     @for (foto of fotosFiltradas(); track foto.imagen; let i = $index) {
-      <figure class="foto">
+      <figure class="foto" revelar [attr.style]="'--retraso:' + (i % 6) * 80 + 'ms'">
         <button
           type="button"
           class="foto__abrir"
@@ -56,6 +56,18 @@
             loading="lazy"
           />
         </button>
+
+        @if (estaFijada(foto)) {
+          <span class="foto__pin" aria-label="Foto fijada" role="img">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"
+              />
+            </svg>
+          </span>
+        }
+
         <figcaption class="foto__pie">
           <span class="foto__categoria">{{ foto.categoria }}</span>
         </figcaption>

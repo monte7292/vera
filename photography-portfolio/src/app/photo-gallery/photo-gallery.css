@@ -7,35 +7,37 @@
   position: sticky;
   top: calc(var(--altura-cabecera, 68px) + 10px);
   z-index: 5;
-  width: fit-content;
+  width: 100%;               /* antes: fit-content */
   margin: 12px 0 24px;
 }
 
-/* Con el menú abierto, queda por encima de cabecera y WhatsApp */
-.filtros--abierto {
-  z-index: 60;
-}
-
 .filtros__principal {
-  display: inline-flex;
+  display: flex;             /* antes: inline-flex */
+  width: 100%;               /* ocupa todo el ancho */
   align-items: center;
+  justify-content: center;   /* texto y flecha centrados */
   gap: 10px;
-  padding: 12px 22px;
-  border: 0;
+  min-height: 2.75rem;
+  padding: 0 20px;
+  border: 1px solid color-mix(in srgb, var(--acento) 70%, transparent);
   border-radius: 999px;
-  background-color: var(--acento);
-  color: #101014;
+  background: color-mix(in srgb, var(--acento) 30%, transparent);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
+  color: #fff;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
   cursor: pointer;
   box-shadow: 0 8px 24px rgb(0 0 0 / 0.3);
-  transition: opacity 0.2s ease, transform 0.15s ease;
+  transition: background 0.2s ease, transform 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .filtros__principal:hover {
-  opacity: 0.85;
+  background: color-mix(in srgb, var(--acento) 45%, transparent);
 }
 
 .filtros__principal:active {
@@ -45,15 +47,6 @@
 .filtros__principal:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 2px;
-}
-
-.filtros__flecha {
-  flex: 0 0 auto;
-  transition: transform 0.2s ease;
-}
-
-.filtros__principal[aria-expanded='true'] .filtros__flecha {
-  transform: rotate(180deg);
 }
 
 /* Fondo que oscurece y cierra al tocar fuera */
@@ -126,6 +119,20 @@
 
 .filtros__opcion--activa .filtros__num {
   background: rgb(0 0 0 / 0.12);
+}
+
+@media (min-width: 720px) {
+  .filtros {
+    width: fit-content;
+  }
+
+  .filtros__principal {
+    display: inline-flex;
+    width: auto;
+    padding: 0 22px;
+  }
+
+  /* ...el resto de reglas que ya tenías aquí... */
 }
 
 @keyframes filtros-subir {
@@ -405,4 +412,44 @@
 
   .visor__flecha--izq { left: 1rem; }
   .visor__flecha--der { right: 1rem; }
+}
+
+/* Chincheta de foto fijada (arriba a la derecha) */
+.foto__pin {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 3px rgb(0 0 0 / 0.6));
+}
+
+.foto__pin svg {
+  transform: rotate(45deg);
+}
+
+/* Aparición de las fotos */
+.foto {
+  opacity: 0;
+  transform: translateY(28px) scale(0.96);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--retraso, 0ms);
+}
+
+.foto.revelado {
+  opacity: 1;
+  transform: none;
+}
+
+/* Respeta a quien tiene las animaciones desactivadas en su sistema */
+@media (prefers-reduced-motion: reduce) {
+  .foto {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

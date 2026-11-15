@@ -8,6 +8,8 @@ import {
   signal,
   viewChild
 } from '@angular/core';
+import { Revelar } from './revelar';
+
 
 export interface Foto {
   titulo: string;
@@ -19,6 +21,7 @@ export interface Foto {
 
 @Component({
   selector: 'app-photo-gallery',
+  imports: [Revelar],
   templateUrl: './photo-gallery.html',
   styleUrl: './photo-gallery.css',
   host: { '(document:keydown)': 'teclado($event)' }
@@ -45,7 +48,18 @@ export class PhotoGallery implements OnInit, OnDestroy {
   protected readonly fotosFiltradas = computed(() => {
     const categoria = this.categoriaActiva();
     const fotos = this.fotos();
-    return categoria === 'Todas' ? fotos : fotos.filter((f) => f.categoria === categoria);
+
+    if (categoria !== 'Todas') {
+      return fotos.filter((f) => f.categoria === categoria);
+    }
+
+    // En "Todas": primero las fijadas (en el orden de la lista), luego el resto
+    const fijadas = this.fijadas
+      .map((nombre) => fotos.find((f) => this.nombreArchivo(f) === nombre.toLowerCase()))
+      .filter((f): f is Foto => !!f);
+
+    const resto = fotos.filter((f) => !fijadas.includes(f));
+    return [...fijadas, ...resto];
   });
 
   protected readonly conteos = computed(() => {
@@ -189,5 +203,26 @@ protected elegirCategoria(categoria: string): void {
     } else if (dy > 90 && Math.abs(dy) > Math.abs(dx) * 1.5) {
       this.cerrar();
     }
+  }
+
+  // Nombres de archivo de las fotos fijadas, en el orden en que quieres que salgan
+  private readonly fijadas = [
+    'img-2101-1M8Tqf.webp', //Coches
+    'img-5266-1lQCCi.webp', //Motos
+    'img-3096-1ML9nW.webp', //Motorsport
+    'img-5490-14xeW0.webp', //Deportes
+    'img-4737-1wGKO_.webp', //Widlife
+    'img-0629-1e4v50.webp', //Eventos
+  ];
+
+  private nombreArchivo(foto: Foto): string {
+    return (foto.imagen.split('/').pop() ?? '').toLowerCase();
+  }
+
+  protected estaFijada(foto: Foto): boolean {
+    return (
+      this.categoriaActiva() === 'Todas' &&
+      this.fijadas.some((n) => n.toLowerCase() === this.nombreArchivo(foto))
+    );
   }
 }

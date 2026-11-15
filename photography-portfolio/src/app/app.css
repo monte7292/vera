@@ -81,10 +81,22 @@
 .hero__boton {
   display: inline-block;
   margin-top: 32px;
+  margin-right: 10px;
   padding: 12px 28px;
   border-radius: 999px;
   background-color: var(--acento);
   color: #101014;
+  font-weight: 600;
+}
+
+.hero__boton2 {
+  display: inline-block;
+  margin-top: 32px;
+  margin-right: 10px;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background-color: #462f04e7;
+  color: #ffffff;
   font-weight: 600;
 }
 
@@ -304,4 +316,141 @@
 
 .cabecera__nav {
   grid-area: nav;
+}
+
+
+.hero__imagen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 2.8s ease;
+}
+
+.hero__imagen--activa {
+  opacity: 1;
+}
+
+/* La página de reseñas arranca bajo la cabecera fija */
+.pagina-resenas {
+  min-height: 70vh;
+  padding-top: calc(var(--altura-cabecera, 68px) + 24px);
+  animation: pagina-entrada 0.35s ease;
+}
+
+.volver {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 18px;
+  margin-bottom: 20px;
+  border: 1px solid rgb(255 255 255 / 0.2);
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.28);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes pagina-entrada {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+.seccion {
+  scroll-margin-top: var(--altura-cabecera, 68px);
+}
+
+.proximamente {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  margin-top: 12px;
+  padding: 44px 24px;
+  overflow: hidden;
+  text-align: center;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 22px;
+  background:
+    radial-gradient(
+      120% 90% at 50% 0%,
+      color-mix(in srgb, var(--acento) 22%, transparent),
+      transparent 65%
+    ),
+    var(--superficie);
+  box-shadow: 0 20px 50px rgb(0 0 0 / 0.35);
+}
+
+/* Estrellas que se encienden una a una */
+.proximamente__estrellas {
+  display: flex;
+  gap: 8px;
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.proximamente__estrellas span {
+  color: rgb(255 255 255 / 0.18);
+  animation: estrella-brillo 2.5s ease-in-out infinite;
+}
+
+.proximamente__estrellas span:nth-child(2) { animation-delay: 0.2s; }
+.proximamente__estrellas span:nth-child(3) { animation-delay: 0.4s; }
+.proximamente__estrellas span:nth-child(4) { animation-delay: 0.6s; }
+.proximamente__estrellas span:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes estrella-brillo {
+  0%, 100% {
+    color: rgb(255 255 255 / 0.18);
+    transform: scale(1);
+    text-shadow: none;
+  }
+  35%, 60% {
+    color: var(--acento);
+    transform: scale(1.18);
+    text-shadow: 0 0 14px color-mix(in srgb, var(--acento) 70%, transparent);
+  }
+}
+
+/* Etiqueta en píldora */
+.proximamente__etiqueta {
+  padding: 6px 16px;
+  border: 1px solid color-mix(in srgb, var(--acento) 60%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--acento) 18%, transparent);
+  color: var(--acento);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.proximamente__texto {
+  margin: 0;
+  max-width: 28ch;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.proximamente__sub {
+  margin: 0;
+  max-width: 34ch;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proximamente__estrellas span {
+    animation: none;
+    color: var(--acento);
+  }
 }

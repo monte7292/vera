@@ -25,36 +25,56 @@
     <span>&#64;davidvera_pic</span>
   </a>
     <nav class="cabecera__nav">
-      <a href="#galeria">Galería</a>
+      <a href="#galeria" (click)="mostrar($event, 'galeria')">Galería</a>
+      <a href="#resenas" (click)="mostrar($event, 'resenas')">Reseñas</a>
       <a href="https://wa.me/34620649328?text=Hola%20David%2C%20me%20gustar%C3%ADa%20hablar%20contigo%20sobre%20una%20sesi%C3%B3n%20de%20fotos.">Contacto</a>
     </nav>
   </div>
 </header>
 
 <section class="hero" id="inicio">
-  <img
-    class="hero__imagen"
-    src="images/fondo.jpg"
-    alt="Fondo de vera con la imagen del coche"
-  />
+  @for (src of imagenes; track src; let i = $index) {
+    <img
+      class="hero__imagen"
+      [class.hero__imagen--activa]="i === actual()"
+      [src]="src"
+      [alt]="'Imagen ' + (i + 1) + ' del carrusel'"
+    />
+  }
   <div class="hero__texto">
-    <p class="seccion__etiqueta">Fotografía, retrato y más</p>
-    <h1>Historias que se quedan contigo</h1>
-    <p class="hero__descripcion">
-      Soy mariquita
-    </p>
-    <a class="hero__boton" href="#galeria">Ver galería</a>
+    <p class="seccion__etiqueta">Fotografía deportiva, eventos...</p>
+    <h2>Capturando velocidad, pasión y emoción</h2>
+    <a class="hero__boton" href="#galeria" (click)="mostrar($event, 'galeria')">Ver galería</a>
+    <a class="hero__boton2 hero__boton--secundario" href="#resenas" (click)="mostrar($event, 'resenas')">Ver reseñas</a>
   </div>
 </section>
 
-<section class="seccion" id="galeria">
-  <p class="seccion__etiqueta etiqueta-titulo">Galería</p>
-  <h2 class="galeria__titulo2">Últimos trabajos</h2>
-  <p class="hero__descripcion">
+@if (vista() === 'galeria') {
+  <section class="seccion" id="galeria">
+    <p class="seccion__etiqueta etiqueta-titulo">Galería</p>
+    <h2 class="galeria__titulo2">Últimos trabajos</h2>
+    <p class="hero__descripcion">
       ¿Te gustaría saber más sobre mis trabajos? Contactame por WhatsApp.
-  </p>
-  <app-photo-gallery />
-</section>
+    </p>
+    <app-photo-gallery />
+  </section>
+} @else {
+  <section class="seccion" id="resenas">
+    <p class="seccion__etiqueta etiqueta-titulo">Reseñas</p>
+    <h2 class="galeria__titulo2">Lo que opinan</h2>
+    <p class="hero__descripcion">Tu opinión ayuda a otros a conocer mi trabajo.</p>
+
+    <div class="proximamente">
+      <div class="proximamente__estrellas" aria-hidden="true">
+        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      </div>
+      <span class="proximamente__etiqueta">Próximamente</span>
+      <p class="proximamente__texto">Muy pronto podrás dejar tu reseña aquí</p>
+    </div>
+  </section>
+}
+
+<!-- aquí sigue el <a class="whatsapp"> y el <footer>, sin ninguna otra sección de galería -->
 
 <a
   class="whatsapp"
