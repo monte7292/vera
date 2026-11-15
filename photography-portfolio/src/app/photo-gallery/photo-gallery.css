@@ -2,90 +2,167 @@
   display: block;
 }
 
-/* ===== Filtros: barra de cristal con chips ===== */
+/* ===== Filtros: botón amarillo + selector ===== */
 .filtros {
   position: sticky;
   top: calc(var(--altura-cabecera, 68px) + 10px);
   z-index: 5;
-  display: flex;
-  gap: 4px;
   width: fit-content;
-  max-width: 100%;
   margin: 12px 0 24px;
-  padding: 5px;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  border: 1px solid rgb(255 255 255 / 0.16);
-  border-radius: 999px;
-  background: rgb(20 20 26 / 0.45);
-  -webkit-backdrop-filter: blur(18px) saturate(170%);
-  backdrop-filter: blur(18px) saturate(170%);
-  box-shadow: 0 8px 30px rgb(0 0 0 / 0.25);
 }
 
-.filtros::-webkit-scrollbar {
-  display: none;
+/* Con el menú abierto, queda por encima de cabecera y WhatsApp */
+.filtros--abierto {
+  z-index: 60;
 }
 
-.filtros__boton {
-  flex: 0 0 auto;
+.filtros__principal {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 16px;
+  gap: 10px;
+  padding: 12px 22px;
   border: 0;
   border-radius: 999px;
-  background: transparent;
-  color: rgb(255 255 255 / 0.75);
+  background-color: var(--acento);
+  color: #101014;
   font: inherit;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  scroll-snap-align: center;
-  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.3);
+  transition: opacity 0.2s ease, transform 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
-.filtros__boton:hover {
-  background: rgb(255 255 255 / 0.1);
-  color: #fff;
+.filtros__principal:hover {
+  opacity: 0.85;
 }
 
-.filtros__boton:focus-visible {
+.filtros__principal:active {
+  transform: scale(0.97);
+}
+
+.filtros__principal:focus-visible {
   outline: 2px solid #fff;
-  outline-offset: 1px;
+  outline-offset: 2px;
 }
 
-.filtros__boton--activo,
-.filtros__boton--activo:hover {
-  background: #fff;
+.filtros__flecha {
+  flex: 0 0 auto;
+  transition: transform 0.2s ease;
+}
+
+.filtros__principal[aria-expanded='true'] .filtros__flecha {
+  transform: rotate(180deg);
+}
+
+/* Fondo que oscurece y cierra al tocar fuera */
+.filtros__fondo {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 0.55);
+  animation: filtros-fondo 0.2s ease;
+}
+
+/* Móvil: panel que sube desde abajo */
+.filtros__menu {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 70dvh;
+  margin: 0;
+  padding: 14px 12px calc(14px + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  list-style: none;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-bottom: 0;
+  border-radius: 22px 22px 0 0;
+  background: rgb(22 22 28 / 0.96);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  animation: filtros-subir 0.25s ease;
+}
+
+.filtros__opcion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease;
+}
+
+.filtros__opcion:hover {
+  background: rgb(255 255 255 / 0.1);
+}
+
+.filtros__opcion--activa,
+.filtros__opcion--activa:hover {
+  background-color: var(--acento);
   color: #101014;
-  box-shadow: 0 2px 12px rgb(0 0 0 / 0.3);
+  font-weight: 600;
 }
 
 .filtros__num {
-  min-width: 1.4rem;
-  padding: 1px 7px;
+  min-width: 1.6rem;
+  padding: 2px 8px;
   border-radius: 999px;
   background: rgb(255 255 255 / 0.14);
-  font-size: 0.7rem;
-  line-height: 1.4;
+  font-size: 0.75rem;
+  font-weight: 500;
   text-align: center;
 }
 
-.filtros__boton--activo .filtros__num {
+.filtros__opcion--activa .filtros__num {
   background: rgb(0 0 0 / 0.12);
 }
 
-/* En ordenador los chips pasan a otra línea si no caben */
+@keyframes filtros-subir {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes filtros-fondo {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Ordenador: menú desplegable bajo el botón */
 @media (min-width: 720px) {
-  .filtros {
-    flex-wrap: wrap;
-    overflow: visible;
-    border-radius: 26px;
+  .filtros__fondo {
+    background: transparent;
+    animation: none;
+  }
+
+  .filtros__menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: auto;
+    bottom: auto;
+    min-width: 260px;
+    max-height: 60vh;
+    padding: 8px;
+    border: 1px solid rgb(255 255 255 / 0.14);
+    border-radius: 16px;
+    box-shadow: 0 16px 40px rgb(0 0 0 / 0.45);
+    animation: none;
+  }
+
+  .filtros__opcion {
+    padding: 11px 14px;
+    font-size: 0.9rem;
   }
 }
 

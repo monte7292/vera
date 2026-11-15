@@ -1,17 +1,38 @@
-<nav class="filtros" aria-label="Categorías">
-  @for (categoria of categorias(); track categoria) {
-    <button
-      type="button"
-      class="filtros__boton"
-      [class.filtros__boton--activo]="categoria === categoriaActiva()"
-      [attr.aria-pressed]="categoria === categoriaActiva()"
-      (click)="seleccionarCategoria(categoria, $event)"
-    >
-      <span class="filtros__texto">{{ categoria }}</span>
-      <span class="filtros__num">{{ conteos().get(categoria) ?? 0 }}</span>
-    </button>
+<div class="filtros" [class.filtros--abierto]="menuAbierto()">
+  <button
+    type="button"
+    class="filtros__principal"
+    aria-haspopup="listbox"
+    [attr.aria-expanded]="menuAbierto()"
+    (click)="alternarMenu()"
+  >
+    <span>Categoría: {{ categoriaActiva() }}</span>
+    <svg class="filtros__flecha" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+      <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  @if (menuAbierto()) {
+    <div class="filtros__fondo" (click)="cerrarMenu()"></div>
+    <ul class="filtros__menu" role="listbox" aria-label="Categorías">
+      @for (categoria of categorias(); track categoria) {
+        <li role="presentation">
+          <button
+            type="button"
+            role="option"
+            class="filtros__opcion"
+            [class.filtros__opcion--activa]="categoria === categoriaActiva()"
+            [attr.aria-selected]="categoria === categoriaActiva()"
+            (click)="elegirCategoria(categoria)"
+          >
+            <span>{{ categoria }}</span>
+            <span class="filtros__num">{{ conteos().get(categoria) ?? 0 }}</span>
+          </button>
+        </li>
+      }
+    </ul>
   }
-</nav>
+</div>
 
 <div class="galeria">
   @if (cargando()) {

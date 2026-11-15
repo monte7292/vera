@@ -29,6 +29,7 @@ export class PhotoGallery implements OnInit, OnDestroy {
   protected readonly error = signal(false);
   protected readonly categoriaActiva = signal('Todas');
   protected readonly indiceAbierto = signal<number | null>(null);
+  protected readonly menuAbierto = signal(false);
 
   private readonly visor = viewChild<ElementRef<HTMLDialogElement>>('visor');
 
@@ -105,6 +106,19 @@ export class PhotoGallery implements OnInit, OnDestroy {
     });
   }
 
+  protected alternarMenu(): void {
+  this.menuAbierto.update((abierto) => !abierto);
+}
+
+protected cerrarMenu(): void {
+  this.menuAbierto.set(false);
+}
+
+protected elegirCategoria(categoria: string): void {
+  this.seleccionarCategoria(categoria);
+  this.menuAbierto.set(false);
+}
+
   protected abrir(indice: number): void {
     this.indiceAbierto.set(indice);
   }
@@ -138,6 +152,10 @@ export class PhotoGallery implements OnInit, OnDestroy {
   }
 
   protected teclado(evento: KeyboardEvent): void {
+    if (evento.key === 'Escape' && this.menuAbierto()) {
+      this.menuAbierto.set(false);
+      return;
+    }
     if (this.indiceAbierto() === null) return;
     if (evento.key === 'ArrowRight') this.siguiente();
     else if (evento.key === 'ArrowLeft') this.anterior();
